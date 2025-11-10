@@ -1,31 +1,40 @@
-# QueueCtl - Your Friendly Task Manager 
+# queuectl
 
-Hi there! Welcome to QueueCtl, a simple yet powerful way to manage your background tasks. Think of it as your personal assistant that handles jobs in order of importance, gives tasks another try if they fail, and keeps you updated on what's happening.
+A lightweight, reliable job queue implementation with SQLite backend using libSQL for persistence.
 
-## What Can It Do? 
+## Features
 
-QueueCtl makes your life easier by:
-- Managing your tasks (we call them jobs) in an organized way
-  Letting important jobs skip the line (priority system)
-- Automatically retrying tasks that fail
-   Showing you what's happening in real-time
--  Working smoothly on both Windows and Mac/Linux
-   Looking good in your terminal with colors and clear information
+- Simple job queue with SQLite persistence
+- Automatic job retries with configurable max attempts
+- Job priority support
+- Delayed job execution (run_at scheduling)
+- Job state tracking (pending, processing, completed, failed, dead)
+- Web dashboard for monitoring queue status
+- Windows and Unix platform support
+- Concurrent worker execution
+## Installation
 
-## Getting Started in 5 Minutes 
-
-1. First, set up your workspace (one-time setup):
-```powershell
-# Tell QueueCtl where to store your tasks
-$env:QUEUECTL_LIBSQL_DSN="file:local.db"
+```bash
+pip install queuectl
 ```
 
-2. Start your dashboard to see what's happening:
-```powershell
-queuectl dashboard  # Then open http://localhost:8080 in your browser
+## Quick Start
+
+1. Set your libSQL database connection:
+
+```bash
+# Using a local SQLite file
+export QUEUECTL_LIBSQL_DSN="file:local.db"
+
+# Or using a turso.tech hosted database
+export QUEUECTL_LIBSQL_DSN="libsql://your-database-url"
 ```
 
-3. Start a worker (this is like hiring an assistant):
+2. Enqueue a job:
+
+```bash
+queuectl enqueue "echo 'Hello from job queue!'"
+```
 ```powershell
 queuectl worker
 ```
@@ -42,20 +51,10 @@ queuectl enqueue --priority 10 "echo 'Urgent task!'"
 queuectl enqueue --retries 5 "echo 'Keep trying!'"
 ```
 
-## Watching Your Tasks 👀
-
-Visit your dashboard at http://localhost:8080 to see:
--  How many tasks are waiting, running, or finished
-   Which workers are active
--  How tasks are performing over time
-   Detailed information about each task
-
 ### Available Dashboard Pages
 - `/api/jobs` - See how your tasks are doing
 - `/api/workers` - Check on your workers
-- `/api/history` - Look back at what's been done
-
-## Command Guide 
+- `/api/history` - Look back at what's been done 
 
 ### Adding Tasks
 ```powershell
@@ -77,10 +76,10 @@ queuectl show <task_id>
 # Test the system with multiple tasks
 queuectl stress -n 10 -d 100  # Creates 10 test tasks
 
-## Task States �
+## Task States 
 
 Your tasks can be in one of these states:
-1. `pending` - Waiting patiently to be worked on
+1.  `pending` - Waiting patiently to be worked on
 2.  `processing` - Currently being worked on
 3.  `completed` - Successfully finished
 4.  `failed` - Something went wrong, but we'll try again
@@ -101,7 +100,7 @@ Here's what's under the hood:
 -  Priority system so important tasks run first
 -  Automatic retry when things go wrong
 -  Real-time statistics
-- Works on Windows, Mac, and Linux
+-  Works on Windows, Mac, and Linux
 
 ## Want to Help? 
 
@@ -136,9 +135,6 @@ Here's a quick demo script to show it off:
    queuectl enqueue --priority 10 "echo 'VIP task!'"
    ```
 
-
-
 ## License
-
 
 MIT - Feel free to use and modify as you like! 📄
